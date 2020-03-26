@@ -1,18 +1,18 @@
 <template>
 	<view class="content">
-		<image class="logo" src="/static/logo.png"></image>
-		<view>
-			<text class="title">{{title}}</text>
-		</view>
+		<view class="search">
+			<!-- 搜索框 -->
+			<view class="input-box">
+				<input type="text" name="" value="搜索" id="">
+			</view>
+		</view>	
 	</view>
 </template>
 
 <script>
 	export default {
 		data() {
-			return {
-				title: '哈哈哈'
-			}
+			return{}
 		},
 		onLoad() {
 
@@ -22,21 +22,17 @@
 		}
 	}
 </script>
-
-<style>
-	.content {
-		text-align: center;
-		height: 400upx;
-	}
-
-	.logo {
-		height: 200upx;
-		width: 200upx;
-		margin-top: 200upx;
-	}
-
-	.title {
-		font-size: 36upx;
-		color: #8f8f94;
+<style lang="less">
+	.content{
+		.input-box{
+			padding: 20rpx 16rpx;
+			background-color: #FF2D4A;
+			input{
+				background-color: #fff;
+				border-radius: 5px;
+			}
+		}
 	}
 </style>
+	
+
