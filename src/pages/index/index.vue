@@ -3,8 +3,8 @@
     <!-- 搜索 -->
     <view class="search">
       <!-- 搜索框 -->
-      <view class="input-box">
-        <input type="text" name id />
+      <view class="input-box" @click="toSearch">
+        <input type="text" />
       </view>
     </view>
 
@@ -111,7 +111,7 @@
     </div>
 
 
-	
+
   </view>
 </template>
 
@@ -121,7 +121,13 @@ export default {
     return {};
   },
   onLoad() {},
-  methods: {}
+  methods: {
+	  toSearch(){
+		  wx.redirectTo({
+			  url:"/pages/search/index"
+		  })
+	  }
+  }
 };
 </script>
 <style lang="less">
@@ -132,7 +138,21 @@ export default {
     input {
       background-color: #fff;
       border-radius: 5px;
-      // background-image: url('static/images/input.png');
+      position: relative;
+      font-size: 24rpx;
+    
+    
+      &::after{
+        content:'搜索';
+        padding-left: 40rpx;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        background-image: url('http://static.botue.com/ugo/images/icon_search%402x.png');
+        background-size: 32rpx;
+        background-repeat: no-repeat;
+      }
     }
   }
   .swiper {
