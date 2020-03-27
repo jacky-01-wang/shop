@@ -11,14 +11,10 @@
     <!-- 轮播图 -->
     <div class="swiper">
       <swiper indicator-dots>
-        <swiper-item>
-          <img src="/static/uploads/banner1.png" alt />
-        </swiper-item>
-        <swiper-item>
-          <img src="/static/uploads/banner2.png" alt />
-        </swiper-item>
-        <swiper-item>
-          <img src="/static/uploads/banner3.png" alt />
+        <swiper-item v-for="item in swiperData" :key="item.goods_id">
+       
+            <img :src="item.image_src" alt />
+
         </swiper-item>
       </swiper>
     </div>
@@ -26,108 +22,77 @@
     <!-- 分类导航 -->
 
     <div class="navs">
-      <navigator url>
-        <img src="/static/uploads/icon_index_nav_1@2x.png" alt />
-      </navigator>
-      <navigator url>
-        <img src="/static/uploads/icon_index_nav_2@2x.png" alt />
-      </navigator>
-      <navigator url>
-        <img src="/static/uploads/icon_index_nav_3@2x.png" alt />
-      </navigator>
-      <navigator url>
-        <img src="/static/uploads/icon_index_nav_4@2x.png" alt />
+      <navigator url v-for="item in navList" :key="item">
+        <img :src="item.image_src" alt />
       </navigator>
     </div>
 
     <!-- 楼层商品 -->
     <div class="floors">
-      <div class="floor">
+      <div class="floor" v-for="item in floorData" :key="item">
         <div class="title">
-          <img src="/static/uploads/pic_floor01_title.png" alt />
+          <img :src="item.floor_title.image_src" alt />
         </div>
         <div class="item">
-          <navigator url>
-            <img src="/static/uploads/pic_floor01_1@2x.png" alt />
-          </navigator>
-          <navigator url>
-            <img src="/static/uploads/pic_floor01_2@2x.png" alt />
-          </navigator>
-          <navigator url>
-            <img src="/static/uploads/pic_floor01_3@2x.png" alt />
-          </navigator>
-          <navigator url>
-            <img src="/static/uploads/pic_floor01_4@2x.png" alt />
-          </navigator>
-          <navigator url>
-            <img src="/static/uploads/pic_floor01_5@2x.png" alt />
-          </navigator>
-        </div>
-      </div>
-      <div class="floor">
-        <div class="title">
-          <img src="/static/uploads/pic_floor01_title.png" alt />
-        </div>
-        <div class="item">
-          <navigator url>
-            <img src="/static/uploads/pic_floor01_1@2x.png" alt />
-          </navigator>
-          <navigator url>
-            <img src="/static/uploads/pic_floor01_2@2x.png" alt />
-          </navigator>
-          <navigator url>
-            <img src="/static/uploads/pic_floor01_3@2x.png" alt />
-          </navigator>
-          <navigator url>
-            <img src="/static/uploads/pic_floor01_4@2x.png" alt />
-          </navigator>
-          <navigator url>
-            <img src="/static/uploads/pic_floor01_5@2x.png" alt />
-          </navigator>
-        </div>
-      </div>
-      <div class="floor">
-        <div class="title">
-          <img src="/static/uploads/pic_floor01_title.png" alt />
-        </div>
-        <div class="item">
-          <navigator url>
-            <img src="/static/uploads/pic_floor01_1@2x.png" alt />
-          </navigator>
-          <navigator url>
-            <img src="/static/uploads/pic_floor01_2@2x.png" alt />
-          </navigator>
-          <navigator url>
-            <img src="/static/uploads/pic_floor01_3@2x.png" alt />
-          </navigator>
-          <navigator url>
-            <img src="/static/uploads/pic_floor01_4@2x.png" alt />
-          </navigator>
-          <navigator url>
-            <img src="/static/uploads/pic_floor01_5@2x.png" alt />
+          <navigator url v-for="i in item.product_list" :key="i">
+            <img :src="i.image_src" alt />
           </navigator>
         </div>
       </div>
     </div>
-
-
-
   </view>
 </template>
 
 <script>
 export default {
   data() {
-    return {};
+    return {
+      swiperData: [],
+      navList:[],
+      floorData:[]
+    };
   },
-  onLoad() {},
+  onLoad() {
+    this.getSwiper();
+    this.getNavData()
+    this.getFloorList()
+  },
   methods: {
-	  toSearch(){
-		  wx.redirectTo({
-			  url:"/pages/search/index"
-		  })
-	  }
-  }
+    // 获得楼层商品数据
+    async  getFloorList(){
+      const {message} =await this.$request({
+        path:'/home/floordata'
+      })
+      console.log(message);
+      
+      this.floorData=message
+    },
+    // 跳转到搜索页面
+    toSearch() {
+      wx.redirectTo({
+        url: "/pages/search/index"
+      });
+    },
+ // 获得导航数据
+  async getNavData(){
+    const {message}=await this.$request({
+      path:'/home/catitems',
+      method:'get'
+    })
+    this.navList=message
+  },
+
+    // 获得轮播图数据
+  async  getSwiper() {
+    const {message}= await this.$request({
+        path:  "/home/swiperdata",
+      });
+      this.swiperData = message;
+    }
+  },
+
+
+ 
 };
 </script>
 <style lang="less">
@@ -140,25 +105,28 @@ export default {
       border-radius: 5px;
       position: relative;
       font-size: 24rpx;
-    
-    
-      &::after{
-        content:'搜索';
+
+      &::after {
+        content: "搜索";
         padding-left: 40rpx;
         position: absolute;
         left: 50%;
         top: 50%;
-        transform: translate(-50%,-50%);
-        background-image: url('http://static.botue.com/ugo/images/icon_search%402x.png');
+        transform: translate(-50%, -50%);
+        background-image: url("http://static.botue.com/ugo/images/icon_search%402x.png");
         background-size: 32rpx;
         background-repeat: no-repeat;
       }
     }
   }
   .swiper {
-    img {
+    navigator {
       width: 750rpx;
       height: 340rpx;
+      img {
+        width: 750rpx;
+        height: 340rpx;
+      }
     }
   }
   .navs {
@@ -187,7 +155,7 @@ export default {
         background-color: #f4f4f4;
       }
       .item {
-		padding: 20rpx 16rpx;
+        padding: 20rpx 16rpx;
         overflow: hidden;
         navigator {
           float: left;
@@ -214,8 +182,8 @@ export default {
             padding-top: 10rpx;
           }
         }
-	  }
-	  &:nth-child(1) {
+      }
+      &:nth-child(1) {
         .item {
           navigator {
             &:nth-child(1) {
